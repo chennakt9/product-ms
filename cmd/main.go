@@ -4,17 +4,16 @@ import (
 	"log"
 	"net"
 
-	pb "github.com/chennakt9/go-grpc-setup/proto"
+	"github.com/chennakt9/product-ms/pkg/db"
+	pb "github.com/chennakt9/product-ms/pkg/proto"
+	services "github.com/chennakt9/product-ms/pkg/services"
 	"google.golang.org/grpc"
 )
 
 const (
-	port = ":8080"
+	port = "127.0.0.1:3000"
 )
 
-type helloServer struct{
-	pb.GreetServiceServer
-}
 func main() {
 	lis, err := net.Listen("tcp", port)
 
@@ -22,13 +21,19 @@ func main() {
 		log.Fatalf("Failed to start the server, %v", err)
 	}
 
+	h := db.Init("host=localhost user=postgres password=1234 dbname=product_svc port=5432")
+
+	s := services.Server {
+		H: h,
+	}
+
 	grpcServer := grpc.NewServer()
 
-	pb.RegisterGreetServiceServer(grpcServer, &helloServer{})
+	pb.RegisterGreetServiceServer(grpcServer, &s)
+
 	log.Printf("Server started at %v", lis.Addr())
+
 	if err := grpcServer.Serve(lis); err != nil {
 		log.Fatalf("Failed to start: %v", err)
 	}
-
-
 }
