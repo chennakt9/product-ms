@@ -5,13 +5,13 @@ import (
 	"net"
 
 	"github.com/chennakt9/product-ms/pkg/db"
-	pb "github.com/chennakt9/product-ms/pkg/proto"
+	pb "github.com/chennakt9/product-ms/pkg/pb"
 	services "github.com/chennakt9/product-ms/pkg/services"
 	"google.golang.org/grpc"
 )
 
 const (
-	port = "127.0.0.1:3000"
+	port = "127.0.0.1:50052"
 )
 
 func main() {
@@ -29,7 +29,7 @@ func main() {
 
 	grpcServer := grpc.NewServer()
 
-	pb.RegisterGreetServiceServer(grpcServer, &s)
+	pb.RegisterProductServiceServer(grpcServer, &s)
 
 	log.Printf("Server started at %v", lis.Addr())
 

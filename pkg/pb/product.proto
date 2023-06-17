@@ -1,10 +1,10 @@
 syntax="proto3";
 
-option go_package = "./pkg/proto";
+option go_package = "./pkg/pb";
 
-package greet_service;
+package product;
 
-service GreetService {
+service ProductService {
   rpc HealthCheck(NoParam) returns (HealthCheckResponse) {}
   rpc CreateProduct(CreateProductRequest) returns (CreateProductResponse) {}
   rpc FindOne(FindOneRequest) returns (FindOneResponse) {}
@@ -54,6 +54,7 @@ message FindOneResponse {
 message DecreaseStockRequest {
   int64 id = 1;
   int64 orderId = 2;
+  int64 quantity = 3;
 }
 
 message DecreaseStockResponse {

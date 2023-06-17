@@ -6,12 +6,12 @@ import (
 
 	"github.com/chennakt9/product-ms/pkg/db"
 	"github.com/chennakt9/product-ms/pkg/models"
-	pb "github.com/chennakt9/product-ms/pkg/proto"
+	pb "github.com/chennakt9/product-ms/pkg/pb"
 )
 
 type Server struct{
 	H db.Handler
-	pb.GreetServiceServer
+	pb.ProductServiceServer
 }
 
 func (s *Server) HealthCheck(ctx context.Context, req *pb.NoParam) (*pb.HealthCheckResponse, error) {
@@ -73,7 +73,7 @@ func (s *Server) DecreaseStock(ctx context.Context, req *pb.DecreaseStockRequest
 		}, nil
 	}
 
-	if product.Stock <= 0 {
+	if product.Stock <= req.Quantity {
 		return &pb.DecreaseStockResponse{
 			Status: http.StatusConflict,
 			Error: "Stock too low",
@@ -89,7 +89,7 @@ func (s *Server) DecreaseStock(ctx context.Context, req *pb.DecreaseStockRequest
 		}, nil
 	}
 
-	product.Stock = product.Stock - 1
+	product.Stock = product.Stock - req.Quantity
 
 	s.H.DB.Save(&product)
 
