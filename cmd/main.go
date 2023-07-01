@@ -11,7 +11,7 @@ import (
 )
 
 const (
-	port = "127.0.0.1:50052"
+	port = "0.0.0.0:50052"
 )
 
 func main() {
@@ -21,7 +21,7 @@ func main() {
 		log.Fatalf("Failed to start the server, %v", err)
 	}
 
-	h := db.Init("host=localhost user=postgres password=1234 dbname=product_svc port=5432")
+	h := db.Init("host=productdb.default.svc user=chenna password=1234 dbname=productdb port=5432")
 
 	s := services.Server {
 		H: h,
